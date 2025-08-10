@@ -2,41 +2,57 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Brio Educação Design System - Colorido, divertido e engajador para adolescentes */
 
 @layer base {
   :root {
+    /* Cores principais da Brio */
+    --brio-yellow: 51 94% 49%; /* #f4cd04 */
+    --brio-blue: 227 75% 51%; /* #2055df */
+    --brio-red: 4 67% 54%; /* #db4437 */
+    --brio-green: 151 91% 33%; /* #0f9d58 */
+    
+    /* Cores de apoio */
+    --brio-yellow-light: 51 94% 85%;
+    --brio-blue-light: 227 75% 85%;
+    --brio-red-light: 4 67% 85%;
+    --brio-green-light: 151 91% 85%;
+    
+    /* Gradientes principais */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--brio-yellow)), hsl(var(--brio-blue)));
+    --gradient-secondary: linear-gradient(135deg, hsl(var(--brio-red)), hsl(var(--brio-green)));
+    --gradient-hero: linear-gradient(135deg, hsl(var(--brio-yellow)) 0%, hsl(var(--brio-blue)) 100%);
+    
+    /* Sistema de cores adaptado */
     --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --foreground: 222 84% 5%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 222 84% 5%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 222 84% 5%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: var(--brio-blue);
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: var(--brio-yellow);
+    --secondary-foreground: 222 84% 5%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: var(--brio-green);
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: var(--brio-red);
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: var(--brio-blue);
 
-    --radius: 0.5rem;
+    --radius: 1rem;
 
     --sidebar-background: 0 0% 98%;
 
@@ -100,6 +116,100 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-poppins;
+  }
+}
+
+@layer components {
+  /* Botões customizados da Brio */
+  .btn-brio-hero {
+    @apply bg-gradient-to-r from-brio-red to-brio-red/90 text-white font-baloo font-bold text-lg px-8 py-4 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 active:scale-95;
+  }
+  
+  .btn-brio-primary {
+    @apply bg-gradient-to-r from-brio-blue to-brio-blue/90 text-white font-baloo font-semibold px-6 py-3 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105;
+  }
+  
+  .btn-brio-secondary {
+    @apply bg-gradient-to-r from-brio-yellow to-brio-yellow/90 text-gray-800 font-baloo font-semibold px-6 py-3 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105;
+  }
+  
+  /* Cards e elementos visuais */
+  .card-brio {
+    @apply bg-white/95 backdrop-blur-sm rounded-2xl shadow-lg border border-white/50 p-6;
+  }
+  
+  .option-card {
+    @apply bg-white/90 backdrop-blur-sm rounded-xl p-4 border-2 border-transparent hover:border-brio-blue/50 transition-all duration-300 cursor-pointer hover:shadow-md hover:scale-105 active:scale-95;
+  }
+  
+  .option-card.selected {
+    @apply border-brio-blue bg-brio-blue/10;
+  }
+  
+  /* Gradientes de fundo */
+  .bg-brio-hero {
+    background: var(--gradient-hero);
+  }
+  
+  .bg-brio-primary {
+    background: var(--gradient-primary);
+  }
+  
+  /* Animações divertidas */
+  .bounce-gentle {
+    animation: bounce-gentle 2s infinite;
+  }
+  
+  .float {
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  .pulse-brio {
+    animation: pulse-brio 2s infinite;
+  }
+  
+  /* Progress bar customizada */
+  .progress-brio {
+    @apply bg-gradient-to-r from-brio-yellow via-brio-green to-brio-blue h-3 rounded-full transition-all duration-500 shadow-sm;
+  }
+}
+
+@layer utilities {
+  /* Cores customizadas usando o sistema */
+  .text-brio-yellow { color: hsl(var(--brio-yellow)); }
+  .text-brio-blue { color: hsl(var(--brio-blue)); }
+  .text-brio-red { color: hsl(var(--brio-red)); }
+  .text-brio-green { color: hsl(var(--brio-green)); }
+  
+  .bg-brio-yellow { background-color: hsl(var(--brio-yellow)); }
+  .bg-brio-blue { background-color: hsl(var(--brio-blue)); }
+  .bg-brio-red { background-color: hsl(var(--brio-red)); }
+  .bg-brio-green { background-color: hsl(var(--brio-green)); }
+  
+  .bg-brio-yellow-light { background-color: hsl(var(--brio-yellow-light)); }
+  .bg-brio-blue-light { background-color: hsl(var(--brio-blue-light)); }
+  .bg-brio-red-light { background-color: hsl(var(--brio-red-light)); }
+  .bg-brio-green-light { background-color: hsl(var(--brio-green-light)); }
+}
+
+/* Keyframes para animações */
+@keyframes bounce-gentle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  33% { transform: translateY(-20px) rotate(1deg); }
+  66% { transform: translateY(-10px) rotate(-1deg); }
+}
+
+@keyframes pulse-brio {
+  0%, 100% { 
+    box-shadow: 0 0 0 0 hsl(var(--brio-blue) / 0.7);
+  }
+  50% { 
+    box-shadow: 0 0 0 20px hsl(var(--brio-blue) / 0);
   }
 }

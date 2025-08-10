@@ -18,6 +18,10 @@ export default {
 			}
 		},
 		extend: {
+			fontFamily: {
+				'baloo': ['Baloo 2', 'cursive'],
+				'poppins': ['Poppins', 'sans-serif']
+			},
 			colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
@@ -61,7 +65,16 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
-				}
+				},
+				// Cores da Brio
+				'brio-yellow': 'hsl(var(--brio-yellow))',
+				'brio-blue': 'hsl(var(--brio-blue))',
+				'brio-red': 'hsl(var(--brio-red))',
+				'brio-green': 'hsl(var(--brio-green))',
+				'brio-yellow-light': 'hsl(var(--brio-yellow-light))',
+				'brio-blue-light': 'hsl(var(--brio-blue-light))',
+				'brio-red-light': 'hsl(var(--brio-red-light))',
+				'brio-green-light': 'hsl(var(--brio-green-light))'
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
