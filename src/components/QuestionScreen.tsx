@@ -175,6 +175,17 @@ const questions: Question[] = [
       { value: "tshirt", label: "👕 Camiseta temática" },
       { value: "stationery", label: "📓 Estojo ou kit de papelaria estilizado" }
     ]
+  },
+  {
+    id: "ambassador",
+    title: "🚀 Quer ser um Embaixador(a) da Brio na sua escola?",
+    emoji: "🏆",
+    type: "radio",
+    description: "Como embaixador(a) da Brio Educação, você vai ter benefícios exclusivos, prêmios dentro da plataforma e a missão de engajar seus amigos e sua turma para participar cada vez mais dos desafios. Quando eles entrarem e participarem, você também ganha pontos, prêmios e vantagens especiais!",
+    options: [
+      { value: "yes", label: "✅ Sim, quero ser um Embaixador(a)!" },
+      { value: "no", label: "❌ Não, obrigado(a)" }
+    ]
   }
 ];
 

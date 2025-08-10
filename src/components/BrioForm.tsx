@@ -15,6 +15,7 @@ export interface FormData {
   hobbies: string[];
   collectibles: string[];
   prize: string;
+  ambassador: string;
 }
 
 const BrioForm = () => {
@@ -29,10 +30,11 @@ const BrioForm = () => {
     favoriteColor: "",
     hobbies: [],
     collectibles: [],
-    prize: ""
+    prize: "",
+    ambassador: ""
   });
 
-  const totalSteps = 12; // Welcome + 10 questions + Final
+  const totalSteps = 13; // Welcome + 11 questions + Final
 
   const handleNext = () => {
     setCurrentStep(prev => prev + 1);
@@ -61,7 +63,8 @@ const BrioForm = () => {
       favoriteColor: "",
       hobbies: [],
       collectibles: [],
-      prize: ""
+      prize: "",
+      ambassador: ""
     });
   };
 
@@ -89,7 +92,7 @@ const BrioForm = () => {
       <div className="container mx-auto px-4 py-8">
         <ProgressBar 
           currentStep={currentStep - 1} 
-          totalSteps={10}
+          totalSteps={11}
         />
         
         <QuestionScreen
