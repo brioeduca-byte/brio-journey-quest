@@ -8,6 +8,16 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
+    proxy: {
+      '/api': {
+        target: 'https://brio-site.vercel.app',
+        changeOrigin: true,
+        secure: false,
+      },
+    },
+  },
+  define: {
+    'process.env': process.env,
   },
   plugins: [
     react(),

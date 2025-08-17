@@ -1,11 +1,125 @@
 import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
+import { FormData } from "./BrioForm";
+import { env } from "@/config/env";
+
+// API Configuration
+// In development, use relative URL to leverage Vite's proxy
+// In production, use the full API URL
+const SLACK_FEEDBACK_ENDPOINT = import.meta.env.DEV 
+  ? '/api/slack/send-message'
+  : `${env.API_BASE_URL}/api/slack/send-message`;
+
+// Types for the Slack API response
+interface SlackApiResponse {
+  success: boolean;
+  timestamp?: string;
+  error?: string;
+}
+
+// Types for the feedback request
+interface FeedbackRequest {
+  message: string;
+}
+
+/**
+ * Sends form data to Slack via the API
+ * @param formData - The form data collected from the user
+ * @param nickname - The user's nickname
+ * @returns Promise<SlackApiResponse> - The API response
+ */
+const sendFormToSlack = async (formData: FormData, nickname: string): Promise<SlackApiResponse> => {
+  try {
+    // Create a comprehensive message from the form data
+    const message = `🎯 # Formulário Aluno!\n\n` +
+      `👤 **Nome Completo:** ${formData.fullName}\n` +
+      `🏷️ **Nickname:** ${formData.nickname}\n` +
+      `⭐ **Personagem Favorito:** ${formData.favoriteCharacter}\n` +
+      `🦸 **Superpoderes:** ${formData.superpowers.join(', ')}\n` +
+      `🌍 **Mundos Favoritos:** ${formData.favoriteWorlds.join(', ')}\n` +
+      `🎵 **Estilo Musical:** ${formData.musicStyle}\n` +
+      `🎨 **Cor Favorita:** ${formData.favoriteColor}\n` +
+      `🎭 **Hobbies:** ${formData.hobbies.join(', ')}\n` +
+      `🏆 **Colecionáveis:** ${formData.collectibles.join(', ')}\n` +
+      `🎁 **Prêmio Escolhido:** ${formData.prize}\n` +
+      `🌟 **Embaixador:** ${formData.ambassador}\n\n` +
+      `🚀 **Status:** Formulário completo enviado com sucesso!`;
+
+    // Prepare the request payload
+    const payload: FeedbackRequest = {
+      message: message,
+    };
+
+    // Make the POST request to the API
+    const response = await fetch(SLACK_FEEDBACK_ENDPOINT, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
+
+    // Parse the response
+    const result: SlackApiResponse = await response.json();
+
+    // Check if the request was successful
+    if (!response.ok) {
+      console.error('API Error:', response.status, result);
+      return {
+        success: false,
+        error: result.error || `HTTP ${response.status}: ${response.statusText}`
+      };
+    }
+
+    return result;
+  } catch (error) {
+    console.error('Network or parsing error:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Erro de conexão desconhecido'
+    };
+  }
+};
 
 interface FinalScreenProps {
   nickname: string;
   onRestart: () => void;
+  formData?: FormData; // Add formData prop
 }
 
-const FinalScreen = ({ nickname, onRestart }: FinalScreenProps) => {
+const FinalScreen = ({ nickname, onRestart, formData }: FinalScreenProps) => {
+  const [slackStatus, setSlackStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
+  const [slackMessage, setSlackMessage] = useState('');
+
+  useEffect(() => {
+    // Send form data to Slack when component mounts
+    if (formData) {
+      sendFormDataToSlack();
+    }
+  }, [formData]);
+
+  const sendFormDataToSlack = async () => {
+    if (!formData) return;
+
+    setSlackStatus('sending');
+    try {
+      const result = await sendFormToSlack(formData, nickname);
+      
+      if (result.success) {
+        setSlackStatus('success');
+        setSlackMessage('Dados enviados com sucesso! 🚀');
+        console.log('Form data sent to Slack successfully:', result.timestamp);
+      } else {
+        setSlackStatus('error');
+        setSlackMessage(`Erro ao enviar dados: ${result.error}`);
+        console.error('Failed to send form data to Slack:', result.error);
+      }
+    } catch (error) {
+      setSlackStatus('error');
+      setSlackMessage('Erro inesperado ao enviar dados');
+      console.error('Unexpected error sending to Slack:', error);
+    }
+  };
   return (
     <div className="min-h-screen bg-brio-hero flex items-center justify-center relative overflow-hidden">
       {/* Confetes animados */}
@@ -56,6 +170,38 @@ const FinalScreen = ({ nickname, onRestart }: FinalScreenProps) => {
             Prepare-se para uma experiência incrível de aprendizado! 🌟
           </p>
         </div>
+
+        {/* Slack Status */}
+        {formData && (
+          <div className="mb-6">
+            {slackStatus === 'sending' && (
+              <div className="flex items-center justify-center space-x-2 text-brio-yellow">
+                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-brio-yellow"></div>
+                <span className="font-poppins text-lg">Enviando dados...</span>
+              </div>
+            )}
+            {slackStatus === 'success' && (
+              <div className="flex items-center justify-center space-x-2 text-green-500">
+                <span className="text-2xl">✅</span>
+                <span className="font-poppins text-lg">{slackMessage}</span>
+              </div>
+            )}
+            {slackStatus === 'error' && (
+              <div className="flex flex-col items-center justify-center space-y-3 text-red-500">
+                <div className="flex items-center space-x-2">
+                  <span className="text-2xl">❌</span>
+                  <span className="font-poppins text-lg">{slackMessage}</span>
+                </div>
+                <Button 
+                  onClick={sendFormDataToSlack}
+                  className="btn-brio-secondary text-sm px-4 py-2 rounded-xl transform hover:scale-105 transition-all duration-300"
+                >
+                  🔄 Tentar novamente
+                </Button>
+              </div>
+            )}
+          </div>
+        )}
         
         {/* Personagem da Brio */}
         <div className="mb-8 text-8xl float">
