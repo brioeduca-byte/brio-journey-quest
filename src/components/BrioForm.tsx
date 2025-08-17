@@ -77,6 +77,7 @@ const BrioForm = () => {
       <FinalScreen 
         nickname={formData.nickname} 
         onRestart={resetForm}
+        formData={formData}
       />
     );
   }

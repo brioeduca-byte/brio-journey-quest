@@ -29,8 +29,8 @@ const ProgressBar = ({ currentStep, totalSteps }: ProgressBarProps) => {
         {Array.from({ length: totalSteps }, (_, index) => (
           <span 
             key={index}
-            className={`text-2xl transition-all duration-300 ${
-              index <= currentStep ? 'animate-bounce' : 'opacity-50'
+            className={`text-2xl transition-all duration-1000 ${
+              index <= currentStep ? '' : 'opacity-50'
             }`}
           >
             {index <= currentStep ? '⭐' : '☆'}

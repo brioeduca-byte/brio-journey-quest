@@ -40,7 +40,7 @@ const WelcomeScreen = ({ onStart }: WelcomeScreenProps) => {
         {/* Botão de início */}
         <Button 
           onClick={onStart}
-          className="btn-brio-hero text-2xl px-12 py-6 rounded-3xl transform hover:scale-110 transition-all duration-300 shadow-2xl pulse-brio"
+          className="btn-brio-hero text-2xl px-12 py-6 rounded-3xl transform hover:scale-110 transition-all duration-300 shadow-2xl"
         >
           🚀 Começar agora
         </Button>
