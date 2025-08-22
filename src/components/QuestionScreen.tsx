@@ -118,7 +118,7 @@ const questions: Question[] = [
     description: "Selecione 1 opção.",
     options: [
       { value: "red", label: "🔴 Vermelho" },
-      { value: "orange", label: "🔴 Rosa" },
+      { value: "orange", label: "🌸 Rosa" },
       { value: "yellow", label: "🟡 Amarelo" },
       { value: "green", label: "🟢 Verde" },
       { value: "blue", label: "🔵 Azul" },
@@ -370,12 +370,17 @@ const QuestionScreen = ({
                     </div>
 
                     {option.hasInput && isSelected && (
+                      <div className="mt-2 text-start">
+                        <p className="font-poppins text-lg text-gray-900 text-start font-bold">
+                          Qual?
+                        </p>
                       <Input
                         value={customInputValue}
                         onChange={(e) => updateCustomInput(e.target.value)}
                         placeholder="Digite sua resposta..."
                         className="mt-2"
                       />
+                      </div>
                     )}
                   </div>
                 );
