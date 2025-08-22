@@ -30,17 +30,41 @@ interface FeedbackRequest {
  */
 const sendFormToSlack = async (formData: FormData, nickname: string): Promise<SlackApiResponse> => {
   try {
+    // Helper function to format array values with custom inputs
+    const formatArrayWithCustom = (values: string[], customValue: string) => {
+      if (!values || values.length === 0) return "Nenhuma seleção";
+      
+      const hasOther = values.includes("other");
+      if (hasOther && customValue) {
+        const otherValues = values.filter(v => v !== "other");
+        if (otherValues.length > 0) {
+          return `${otherValues.join(', ')} e "${customValue}"`;
+        } else {
+          return `"${customValue}"`;
+        }
+      }
+      return values.join(', ');
+    };
+
+    // Helper function to format single values with custom inputs
+    const formatSingleWithCustom = (value: string, customValue: string) => {
+      if (value === "other" && customValue) {
+        return `"${customValue}"`;
+      }
+      return value;
+    };
+
     // Create a comprehensive message from the form data
     const message = `🎯 # Formulário Aluno!\n\n` +
       `👤 **Nome Completo:** ${formData.fullName}\n` +
       `🏷️ **Nickname:** ${formData.nickname}\n` +
-      `⭐ **Personagem Favorito:** ${formData.favoriteCharacter}\n` +
-      `🦸 **Superpoderes:** ${formData.superpowers.join(', ')}\n` +
-      `🌍 **Mundos Favoritos:** ${formData.favoriteWorlds.join(', ')}\n` +
-      `🎵 **Estilo Musical:** ${formData.musicStyle}\n` +
+      `⭐ **Personagem Favorito:** ${formatSingleWithCustom(formData.favoriteCharacter, formData.favoriteCharacterCustom)}\n` +
+      `🦸 **Superpoderes:** ${formatArrayWithCustom(formData.superpowers, formData.superpowersCustom)}\n` +
+      `🌍 **Mundos Favoritos:** ${formatArrayWithCustom(formData.favoriteWorlds, formData.favoriteWorldsCustom)}\n` +
+      `🎵 **Estilo Musical:** ${formatSingleWithCustom(formData.musicStyle, formData.musicStyleCustom)}\n` +
       `🎨 **Cor Favorita:** ${formData.favoriteColor}\n` +
-      `🎭 **Hobbies:** ${formData.hobbies.join(', ')}\n` +
-      `🏆 **Colecionáveis:** ${formData.collectibles.join(', ')}\n` +
+      `🎭 **Hobbies:** ${formatArrayWithCustom(formData.hobbies, formData.hobbiesCustom)}\n` +
+      `🏆 **Colecionáveis:** ${formatArrayWithCustom(formData.collectibles, formData.collectiblesCustom)}\n` +
       `🎁 **Prêmio Escolhido:** ${formData.prize}\n` +
       `🌟 **Embaixador:** ${formData.ambassador}\n\n` +
       `🚀 **Status:** Formulário completo enviado com sucesso!`;

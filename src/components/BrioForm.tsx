@@ -8,12 +8,18 @@ export interface FormData {
   fullName: string;
   nickname: string;
   favoriteCharacter: string;
+  favoriteCharacterCustom: string;
   superpowers: string[];
+  superpowersCustom: string;
   favoriteWorlds: string[];
+  favoriteWorldsCustom: string;
   musicStyle: string;
+  musicStyleCustom: string;
   favoriteColor: string;
   hobbies: string[];
+  hobbiesCustom: string;
   collectibles: string[];
+  collectiblesCustom: string;
   prize: string;
   ambassador: string;
 }
@@ -24,12 +30,18 @@ const BrioForm = () => {
     fullName: "",
     nickname: "",
     favoriteCharacter: "",
+    favoriteCharacterCustom: "",
     superpowers: [],
+    superpowersCustom: "",
     favoriteWorlds: [],
+    favoriteWorldsCustom: "",
     musicStyle: "",
+    musicStyleCustom: "",
     favoriteColor: "",
     hobbies: [],
+    hobbiesCustom: "",
     collectibles: [],
+    collectiblesCustom: "",
     prize: "",
     ambassador: ""
   });
@@ -57,12 +69,18 @@ const BrioForm = () => {
       fullName: "",
       nickname: "",
       favoriteCharacter: "",
+      favoriteCharacterCustom: "",
       superpowers: [],
+      superpowersCustom: "",
       favoriteWorlds: [],
+      favoriteWorldsCustom: "",
       musicStyle: "",
+      musicStyleCustom: "",
       favoriteColor: "",
       hobbies: [],
+      hobbiesCustom: "",
       collectibles: [],
+      collectiblesCustom: "",
       prize: "",
       ambassador: ""
     });
