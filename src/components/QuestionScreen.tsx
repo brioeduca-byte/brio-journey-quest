@@ -106,7 +106,7 @@ const questions: Question[] = [
       { value: "sertanejo", label: "🎤 Sertanejo", desc: "músicas do interior e sertão" },
       { value: "kpop", label: "🎧 K-Pop", desc: "pop coreano, com danças e grupos famosos" },
       { value: "mpb", label: "🎼 MPB", desc: "Música Popular Brasileira" },
-      { value: "funk", label: "🎼 MPB", desc: "Música Popular Brasileira" },
+      { value: "funk", label: "🎤 Funk", desc: "Música Popular Brasileira" },
       { value: "other", label: "✏️ Outro", hasInput: true }
     ]
   },
@@ -118,7 +118,7 @@ const questions: Question[] = [
     description: "Selecione 1 opção.",
     options: [
       { value: "red", label: "🔴 Vermelho" },
-      { value: "orange", label: "🟠 Laranja" },
+      { value: "orange", label: "🔴 Rosa" },
       { value: "yellow", label: "🟡 Amarelo" },
       { value: "green", label: "🟢 Verde" },
       { value: "blue", label: "🔵 Azul" },
