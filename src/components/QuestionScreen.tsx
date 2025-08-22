@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FormData } from "./BrioForm";
 
 interface Option {
@@ -45,7 +45,7 @@ const questions: Question[] = [
   },
   {
     id: "favoriteCharacter",
-    title: "Qual personagem você mais gosta?",
+    title: "Qual desses personagens você mais gosta?",
     emoji: "🎭",
     type: "radio",
     description: "Escolha o seu favorito ou escreva o seu se não estiver aqui.",
@@ -56,7 +56,7 @@ const questions: Question[] = [
       { value: "robot", label: "🤖 Robô Futurista", desc: "tecnologia e invenções" },
       { value: "magical", label: "🦄 Criatura Mágica", desc: "unicórnios, fadas, etc." },
       { value: "pirate", label: "🏴‍☠️ Pirata Destemido", desc: "aventuras pelos mares" },
-      { value: "other", label: "✏️ Outro", desc: "digite seu personagem favorito" }
+      { value: "other", label: "✏️ Outro", desc: "digite seu personagem favorito", hasInput: true }
     ]
   },
   {
@@ -106,6 +106,7 @@ const questions: Question[] = [
       { value: "sertanejo", label: "🎤 Sertanejo", desc: "músicas do interior e sertão" },
       { value: "kpop", label: "🎧 K-Pop", desc: "pop coreano, com danças e grupos famosos" },
       { value: "mpb", label: "🎼 MPB", desc: "Música Popular Brasileira" },
+      { value: "funk", label: "🎤 Funk", desc: "Música Popular Brasileira" },
       { value: "other", label: "✏️ Outro", hasInput: true }
     ]
   },
@@ -117,7 +118,7 @@ const questions: Question[] = [
     description: "Selecione 1 opção.",
     options: [
       { value: "red", label: "🔴 Vermelho" },
-      { value: "orange", label: "🟠 Laranja" },
+      { value: "orange", label: "🔴 Rosa" },
       { value: "yellow", label: "🟡 Amarelo" },
       { value: "green", label: "🟢 Verde" },
       { value: "blue", label: "🔵 Azul" },
@@ -189,17 +190,28 @@ const questions: Question[] = [
   }
 ];
 
-const QuestionScreen = ({ 
-  step, 
-  formData, 
-  updateFormData, 
-  onNext, 
-  onBack 
+const QuestionScreen = ({
+  step,
+  formData,
+  updateFormData,
+  onNext,
+  onBack
 }: QuestionScreenProps) => {
-  const [customInput, setCustomInput] = useState("");
   const question = questions[step];
   const nickname = formData.nickname || "aventureiro(a)";
-  
+
+  // Get the current question's custom input value from form data
+  const getCustomInputValue = () => {
+    const customFieldKey = `${question.id}Custom` as keyof FormData;
+    return (formData as any)[customFieldKey] || "";
+  };
+
+  // Update the custom input value in form data
+  const updateCustomInput = (value: string) => {
+    const customFieldKey = `${question.id}Custom` as keyof FormData;
+    updateFormData(customFieldKey, value);
+  };
+
   if (!question) return null;
 
   const handleNext = () => {
@@ -214,7 +226,22 @@ const QuestionScreen = ({
     if (question.type === "checkbox" && (!currentValue || currentValue.length === 0)) {
       return;
     }
-    
+
+    // Additional validation for "other" options with custom input
+    if (question.type === "radio" && currentValue === "other") {
+      const customValue = getCustomInputValue();
+      if (!customValue.trim()) {
+        return; // Don't proceed if "other" is selected but no custom input
+      }
+    }
+
+    if (question.type === "checkbox" && currentValue?.includes("other")) {
+      const customValue = getCustomInputValue();
+      if (!customValue.trim()) {
+        return; // Don't proceed if "other" is selected but no custom input
+      }
+    }
+
     onNext();
   };
 
@@ -223,17 +250,13 @@ const QuestionScreen = ({
   };
 
   const handleRadioChange = (value: string) => {
-    if (value === "other" && question.options?.find(opt => opt.value === "other")?.hasInput) {
-      updateFormData(question.id as keyof FormData, customInput || "");
-    } else {
-      updateFormData(question.id as keyof FormData, value);
-    }
+    updateFormData(question.id as keyof FormData, value);
   };
 
   const handleCheckboxChange = (value: string, checked: boolean) => {
     const currentValues = (formData as any)[question.id] || [];
     let newValues;
-    
+
     if (checked) {
       if (question.maxSelections && currentValues.length >= question.maxSelections) {
         return;
@@ -242,14 +265,16 @@ const QuestionScreen = ({
     } else {
       newValues = currentValues.filter((v: string) => v !== value);
     }
-    
+
     updateFormData(question.id as keyof FormData, newValues);
   };
 
   const currentValue = (formData as any)[question.id];
-  const isValid = question.type === "text" ? !!currentValue : 
-                  question.type === "radio" ? !!currentValue :
-                  question.type === "checkbox" ? currentValue && currentValue.length > 0 : false;
+  const customInputValue = getCustomInputValue();
+
+  const isValid = question.type === "text" ? !!currentValue :
+    question.type === "radio" ? !!currentValue :
+      question.type === "checkbox" ? currentValue && currentValue.length > 0 : false;
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -260,7 +285,7 @@ const QuestionScreen = ({
             Oi, <span className="font-bold text-brio-blue">{nickname}</span>! 👋
           </p>
         )}
-        
+
         {/* Pergunta */}
         <div className="mb-6">
           <div className="text-6xl mb-4">{question.emoji}</div>
@@ -300,14 +325,19 @@ const QuestionScreen = ({
                       </div>
                     )}
                   </div>
-                  
+
                   {option.hasInput && currentValue === option.value && (
-                    <Input
-                      value={customInput}
-                      onChange={(e) => setCustomInput(e.target.value)}
-                      placeholder="Digite sua resposta..."
-                      className="mt-2"
-                    />
+                    <div className="mt-2">
+                      <p className="font-poppins text-lg text-gray-900 text-start font-bold">
+                        Qual?
+                      </p>
+                      <Input
+                        value={customInputValue}
+                        onChange={(e) => updateCustomInput(e.target.value)}
+                        placeholder="Digite sua resposta..."
+                        className="mt-2"
+                      />
+                    </div>
                   )}
                 </div>
               ))}
@@ -318,16 +348,15 @@ const QuestionScreen = ({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {question.options?.map((option) => {
                 const isSelected = currentValue?.includes(option.value);
-                const isDisabled = question.maxSelections && 
-                                 currentValue?.length >= question.maxSelections && 
-                                 !isSelected;
-                
+                const isDisabled = question.maxSelections &&
+                  currentValue?.length >= question.maxSelections &&
+                  !isSelected;
+
                 return (
                   <div key={option.value}>
                     <div
-                      className={`option-card ${isSelected ? "selected" : ""} ${
-                        isDisabled ? "opacity-50 cursor-not-allowed" : ""
-                      }`}
+                      className={`option-card ${isSelected ? "selected" : ""} ${isDisabled ? "opacity-50 cursor-not-allowed" : ""
+                        }`}
                       onClick={() => !isDisabled && handleCheckboxChange(option.value, !isSelected)}
                     >
                       <div className="flex items-center justify-between">
@@ -339,11 +368,11 @@ const QuestionScreen = ({
                         </span>
                       </div>
                     </div>
-                    
+
                     {option.hasInput && isSelected && (
                       <Input
-                        value={customInput}
-                        onChange={(e) => setCustomInput(e.target.value)}
+                        value={customInputValue}
+                        onChange={(e) => updateCustomInput(e.target.value)}
                         placeholder="Digite sua resposta..."
                         className="mt-2"
                       />
@@ -372,7 +401,7 @@ const QuestionScreen = ({
           >
             ← Voltar
           </Button>
-          
+
           <Button
             onClick={handleNext}
             disabled={!isValid}
