@@ -273,7 +273,7 @@ const QuestionScreen = ({
   const customInputValue = getCustomInputValue();
 
   const isValid = question.type === "text" ? !!currentValue :
-    question.type === "radio" ? !!currentValue :
+    question.type === "radio" ? (currentValue === "other" ? !!customInputValue.trim() : !!currentValue) :
       question.type === "checkbox" ? currentValue && currentValue.length > 0 : false;
 
   return (
