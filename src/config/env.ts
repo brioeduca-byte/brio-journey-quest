@@ -7,7 +7,7 @@ export const env = {
   // API Configuration
   // In development, Vite proxy handles /api requests
   // In production, use the full API URL
-  API_BASE_URL: import.meta.env.VITE_API_BASE_URL || 'https://brio-site.vercel.app',
+  API_BASE_URL: import.meta.env.VITE_API_BASE_URL || 'https://www.brioeducacional.com.br',
   
   // Development flag
   IS_DEV: import.meta.env.DEV,

@@ -10,7 +10,7 @@ export default defineConfig(({ mode }) => ({
     port: 8080,
     proxy: {
       '/api': {
-        target: 'https://brio-site.vercel.app',
+        target: 'https://www.brioeducacional.com.br',
         changeOrigin: true,
         secure: false,
       },
