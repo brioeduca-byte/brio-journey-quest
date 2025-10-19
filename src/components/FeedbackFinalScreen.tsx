@@ -4,6 +4,8 @@ import { FeedbackFormData } from "./FeedbackQuestionScreen";
 import { env } from "@/config/env";
 
 // API Configuration
+// In development, use relative URL to leverage Vite's proxy
+// In production, use the full API URL
 const SLACK_FEEDBACK_ENDPOINT = import.meta.env.DEV 
   ? '/api/slack/send-message'
   : `${env.API_BASE_URL}/api/slack/send-message`;
@@ -27,12 +29,18 @@ interface FeedbackRequest {
  */
 const sendFeedbackToSlack = async (formData: FeedbackFormData): Promise<SlackApiResponse> => {
   try {
+    // Helper function to truncate long text
+    const truncateText = (text: string, maxLength: number = 500) => {
+      if (!text || text.length <= maxLength) return text;
+      return text.substring(0, maxLength) + "...";
+    };
+
     // Create a comprehensive message from the feedback data
     const message = `📋 # Feedback do Piloto Brio - Maple Bear\n\n` +
       `📝 **PERGUNTAS ABERTAS**\n` +
-      `💙 **O que mais gostou:** ${formData.whatLiked || "Não informado"}\n` +
-      `📚 **Mais organizado/motivado:** ${formData.moreOrganized || "Não informado"}\n` +
-      `👥 **O que diria para um amigo:** ${formData.tellFriend || "Não informado"}\n\n` +
+      `💙 **O que mais gostou:** ${truncateText(formData.whatLiked || "Não informado")}\n` +
+      `📚 **Mais organizado/motivado:** ${truncateText(formData.moreOrganized || "Não informado")}\n` +
+      `👥 **O que diria para um amigo:** ${truncateText(formData.tellFriend || "Não informado")}\n\n` +
       
       `⭐ **AVALIAÇÕES (1-5)**\n` +
       `🤝 **Me senti acompanhado:** ${formData.feltAccompanied || "Não avaliado"}/5\n` +
@@ -41,17 +49,17 @@ const sendFeedbackToSlack = async (formData: FeedbackFormData): Promise<SlackApi
       `🎯 **Monitoria útil:** ${formData.monitoringUseful || "Não avaliado"}/5\n\n` +
       
       `📊 **NPS: ${formData.npsScore || "Não avaliado"}/10**\n` +
-      `💭 **Motivo da nota:** ${formData.npsReason || "Não informado"}\n\n` +
+      `💭 **Motivo da nota:** ${truncateText(formData.npsReason || "Não informado")}\n\n` +
       
       `🚀 **VISÃO DE FUTURO**\n` +
-      `**Brio em outras matérias:** ${formData.futureOtherSubjects || "Não informado"}\n\n` +
+      `**Brio em outras matérias:** ${truncateText(formData.futureOtherSubjects || "Não informado")}\n\n` +
       
       `🔧 **MELHORIAS SUGERIDAS**\n` +
-      `**O que melhorar:** ${formData.whatToImprove || "Não informado"}\n` +
-      `**Usaria mais se:** ${formData.useMoreIf || "Não informado"}\n\n` +
+      `**O que melhorar:** ${truncateText(formData.whatToImprove || "Não informado")}\n` +
+      `**Usaria mais se:** ${truncateText(formData.useMoreIf || "Não informado")}\n\n` +
       
       `🎨 **ESPAÇO LIVRE**\n` +
-      `**Mensagem final:** ${formData.freeMessage || "Não informado"}\n\n` +
+      `**Mensagem final:** ${truncateText(formData.freeMessage || "Não informado")}\n\n` +
       
       `🚀 **Status:** Formulário de feedback completo enviado com sucesso!`;
 
@@ -60,17 +68,31 @@ const sendFeedbackToSlack = async (formData: FeedbackFormData): Promise<SlackApi
       message: message,
     };
 
-    // Make the POST request to the API
+    // Make the POST request to the API with timeout
+    console.log('Environment:', import.meta.env.DEV ? 'development' : 'production');
+    console.log('Sending feedback to:', SLACK_FEEDBACK_ENDPOINT);
+    console.log('Payload size:', JSON.stringify(payload).length, 'characters');
+    
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+    
     const response = await fetch(SLACK_FEEDBACK_ENDPOINT, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(payload),
+      signal: controller.signal,
     });
+    
+    clearTimeout(timeoutId);
+
+    console.log('Response status:', response.status);
+    console.log('Response ok:', response.ok);
 
     // Parse the response
     const result: SlackApiResponse = await response.json();
+    console.log('Response data:', result);
 
     // Check if the request was successful
     if (!response.ok) {
@@ -84,6 +106,29 @@ const sendFeedbackToSlack = async (formData: FeedbackFormData): Promise<SlackApi
     return result;
   } catch (error) {
     console.error('Network or parsing error:', error);
+    
+    // Handle different types of errors
+    if (error instanceof TypeError && error.message.includes('fetch')) {
+      return {
+        success: false,
+        error: 'Erro de conexão: Verifique sua internet e tente novamente'
+      };
+    }
+    
+    if (error instanceof SyntaxError) {
+      return {
+        success: false,
+        error: 'Erro ao processar resposta do servidor'
+      };
+    }
+    
+    if (error instanceof Error && error.name === 'AbortError') {
+      return {
+        success: false,
+        error: 'Timeout: A requisição demorou muito para responder. Tente novamente.'
+      };
+    }
+    
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Erro de conexão desconhecido'
