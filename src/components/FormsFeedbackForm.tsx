@@ -28,7 +28,7 @@ const FormsFeedbackForm = () => {
     freeMessage: ""
   });
 
-  const totalSteps = 10; // Welcome + 9 questions + Final
+  const totalSteps = 11; // Welcome + 10 questions + Final
 
   const handleNext = () => {
     setCurrentStep(prev => prev + 1);
@@ -85,7 +85,7 @@ const FormsFeedbackForm = () => {
       <div className="container mx-auto px-4 py-8">
         <ProgressBar 
           currentStep={currentStep - 1} 
-          totalSteps={9}
+          totalSteps={10}
         />
         
         <FeedbackQuestionScreen

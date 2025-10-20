@@ -17,7 +17,6 @@ export interface FeedbackFormData {
   gamificationFun: number;
   monitoringUseful: number;
   
-  
   // Seção 3 - Visão de Futuro
   futureOtherSubjects: string;
   
