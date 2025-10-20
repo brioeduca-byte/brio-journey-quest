@@ -266,7 +266,7 @@ const FeedbackQuestionScreen = ({
               {question.suggestions && question.suggestions.length > 1 && (
                 <div className="text-left">
                   <p className="font-poppins text-sm text-gray-500 mb-2">
-                    💬 Sugestão para começar sua resposta:
+                    <span className="font-bold">💬 Sugestão para começar sua resposta:</span>
                     <span className="text-xs text-gray-400 ml-2"></span>
                   </p>
                   <div className="bg-brio-blue-light/20 rounded-lg p-3 border border-brio-blue/30 transition-all duration-500 ease-in-out">
