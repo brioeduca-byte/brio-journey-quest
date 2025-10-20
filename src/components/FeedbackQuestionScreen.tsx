@@ -118,7 +118,7 @@ const questions: FeedbackQuestion[] = [
   },
   {
     id: "monitoringUseful",
-    title: "A monitoria me ajudou a tirar dúvidas ou me manter no caminho certo.",
+    title: "A monitoria (chat de dúvidas) me ajudou a tirar dúvidas ou me manter no caminho certo.",
     emoji: "🎯",
     type: "likert",
     description: "(1 = Discordo totalmente | 5 = Concordo totalmente)"
