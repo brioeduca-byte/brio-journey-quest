@@ -33,7 +33,7 @@ const FeedbackWelcomeScreen = ({ onStart }: FeedbackWelcomeScreenProps) => {
         {/* Descrição */}
         <div className="card-brio mb-8 text-left">
           <p className="font-poppins text-lg md:text-xl text-gray-800 mb-4 leading-relaxed">
-            Lá no começo do piloto, a gente falou que a Brio só faria sentido se fosse construída junto com vocês. 
+          Lá no começo da nossa jornada com a Brio, a gente falou que tudo só faria sentido se fosse construído junto com vocês.
             Agora que vocês já usaram a plataforma por algumas semanas, chegou a hora de ouvir o que acharam!
           </p>
           <p className="font-poppins text-lg md:text-xl text-gray-800 leading-relaxed">
