@@ -3,6 +3,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
 
 export interface FeedbackFormData {
+  // Seção 0 - Identificação
+  fullName: string;
+  
   // Seção 1 - Perguntas Abertas
   whatLiked: string;
   moreOrganized: string;
@@ -14,18 +17,11 @@ export interface FeedbackFormData {
   gamificationFun: number;
   monitoringUseful: number;
   
-  // Seção 3 - NPS
-  npsScore: number;
-  npsReason: string;
   
-  // Seção 4 - Visão de Futuro
+  // Seção 3 - Visão de Futuro
   futureOtherSubjects: string;
   
-  // Seção 5 - Melhorias
-  whatToImprove: string;
-  useMoreIf: string;
-  
-  // Seção 6 - Espaço Livre
+  // Seção 4 - Espaço Livre
   freeMessage: string;
 }
 
@@ -48,6 +44,15 @@ interface FeedbackQuestionScreenProps {
 }
 
 const questions: FeedbackQuestion[] = [
+  // Seção 0 - Identificação
+  {
+    id: "fullName",
+    title: "Qual é o seu nome completo?",
+    emoji: "✍️",
+    type: "textarea",
+    description: "Queremos conhecer você melhor!"
+  },
+  
   // Seção 1 - Perguntas Abertas
   {
     id: "whatLiked",
@@ -119,23 +124,8 @@ const questions: FeedbackQuestion[] = [
     description: "(1 = Discordo totalmente | 5 = Concordo totalmente)"
   },
   
-  // Seção 3 - NPS
-  {
-    id: "npsScore",
-    title: "De 0 a 10, o quanto você recomendaria a Brio para um amigo?",
-    emoji: "⭐",
-    type: "nps",
-    description: "0 = Não recomendaria | 10 = Recomendaria muito!"
-  },
-  {
-    id: "npsReason",
-    title: "O que te fez dar essa nota?",
-    emoji: "💭",
-    type: "nps-reason",
-    description: "Explica pra gente o que te levou a dar essa nota!"
-  },
   
-  // Seção 4 - Visão de Futuro
+  // Seção 3 - Visão de Futuro
   {
     id: "futureOtherSubjects",
     title: "Se a Brio continuasse com você no ano que vem, em mais matérias, como você acha que isso te ajudaria?",
@@ -150,35 +140,7 @@ const questions: FeedbackQuestion[] = [
     ]
   },
   
-  // Seção 5 - Melhorias
-  {
-    id: "whatToImprove",
-    title: "O que você acha que poderia ser melhor na Brio? Pode falar com sinceridade!",
-    emoji: "🔧",
-    type: "textarea",
-    description: "Sua opinião sincera nos ajuda muito!",
-    placeholder: "Uma coisa que acho que poderia melhorar é...",
-    suggestions: [
-      "Uma coisa que acho que poderia melhorar é...",
-      "Senti falta de...",
-      "Talvez ficasse melhor se..."
-    ]
-  },
-  {
-    id: "useMoreIf",
-    title: "O que faria com que você quisesse usar mais a plataforma da Brio no seu dia a dia nos estudos?",
-    emoji: "💡",
-    type: "textarea",
-    description: "O que te faria usar a Brio ainda mais?",
-    placeholder: "Eu usaria mais se tivesse…",
-    suggestions: [
-      "Eu usaria mais se tivesse…",
-      "Acho que seria mais útil no meu dia a dia se…",
-      "Seria mais fácil de usar no meu ritmo se…"
-    ]
-  },
-  
-  // Seção 6 - Espaço Livre
+  // Seção 4 - Espaço Livre
   {
     id: "freeMessage",
     title: "Quer deixar mais alguma mensagem, ideia ou sugestão pra gente?",

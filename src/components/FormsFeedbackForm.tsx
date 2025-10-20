@@ -7,6 +7,9 @@ import ProgressBar from "./ProgressBar";
 const FormsFeedbackForm = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState<FeedbackFormData>({
+    // Seção 0 - Identificação
+    fullName: "",
+    
     // Seção 1 - Perguntas Abertas
     whatLiked: "",
     moreOrganized: "",
@@ -18,22 +21,14 @@ const FormsFeedbackForm = () => {
     gamificationFun: 0,
     monitoringUseful: 0,
     
-    // Seção 3 - NPS
-    npsScore: -1,
-    npsReason: "",
-    
-    // Seção 4 - Visão de Futuro
+    // Seção 3 - Visão de Futuro
     futureOtherSubjects: "",
     
-    // Seção 5 - Melhorias
-    whatToImprove: "",
-    useMoreIf: "",
-    
-    // Seção 6 - Espaço Livre
+    // Seção 4 - Espaço Livre
     freeMessage: ""
   });
 
-  const totalSteps = 13; // Welcome + 12 questions + Final
+  const totalSteps = 10; // Welcome + 9 questions + Final
 
   const handleNext = () => {
     setCurrentStep(prev => prev + 1);
@@ -53,6 +48,7 @@ const FormsFeedbackForm = () => {
   const resetForm = () => {
     setCurrentStep(0);
     setFormData({
+      fullName: "",
       whatLiked: "",
       moreOrganized: "",
       tellFriend: "",
@@ -60,11 +56,7 @@ const FormsFeedbackForm = () => {
       schedulesHelped: 0,
       gamificationFun: 0,
       monitoringUseful: 0,
-      npsScore: -1,
-      npsReason: "",
       futureOtherSubjects: "",
-      whatToImprove: "",
-      useMoreIf: "",
       freeMessage: ""
     });
   };
@@ -93,7 +85,7 @@ const FormsFeedbackForm = () => {
       <div className="container mx-auto px-4 py-8">
         <ProgressBar 
           currentStep={currentStep - 1} 
-          totalSteps={12}
+          totalSteps={9}
         />
         
         <FeedbackQuestionScreen

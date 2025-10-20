@@ -37,6 +37,7 @@ const sendFeedbackToSlack = async (formData: FeedbackFormData): Promise<SlackApi
 
     // Create a comprehensive message from the feedback data
     const message = `📋 # Feedback do Piloto Brio - Maple Bear\n\n` +
+      `👤 **Nome do Aluno:** ${formData.fullName || "Não informado"}\n\n` +
       `📝 **PERGUNTAS ABERTAS**\n` +
       `💙 **O que mais gostou:** ${truncateText(formData.whatLiked || "Não informado")}\n` +
       `📚 **Mais organizado/motivado:** ${truncateText(formData.moreOrganized || "Não informado")}\n` +
@@ -48,15 +49,8 @@ const sendFeedbackToSlack = async (formData: FeedbackFormData): Promise<SlackApi
       `🎮 **Gamificação divertida:** ${formData.gamificationFun || "Não avaliado"}/5\n` +
       `🎯 **Monitoria útil:** ${formData.monitoringUseful || "Não avaliado"}/5\n\n` +
       
-      `📊 **NPS: ${formData.npsScore || "Não avaliado"}/10**\n` +
-      `💭 **Motivo da nota:** ${truncateText(formData.npsReason || "Não informado")}\n\n` +
-      
       `🚀 **VISÃO DE FUTURO**\n` +
       `**Brio em outras matérias:** ${truncateText(formData.futureOtherSubjects || "Não informado")}\n\n` +
-      
-      `🔧 **MELHORIAS SUGERIDAS**\n` +
-      `**O que melhorar:** ${truncateText(formData.whatToImprove || "Não informado")}\n` +
-      `**Usaria mais se:** ${truncateText(formData.useMoreIf || "Não informado")}\n\n` +
       
       `🎨 **ESPAÇO LIVRE**\n` +
       `**Mensagem final:** ${truncateText(formData.freeMessage || "Não informado")}\n\n` +
@@ -211,8 +205,8 @@ const FeedbackFinalScreen = ({ onRestart, formData }: FeedbackFinalScreenProps) 
         
         {/* Título de sucesso */}
         <h1 className="font-baloo text-4xl md:text-6xl font-bold text-white mb-8 leading-tight">
-          🎯 Muito obrigado(a)!<br />
-          <span className="text-brio-yellow">Seu feedback é valioso!</span>
+          🎯 Muito obrigado(a),<br />
+          <span className="text-brio-yellow">{formData.fullName || "aluno(a)"}!</span>
         </h1>
         
         {/* Mensagem principal */}
