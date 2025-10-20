@@ -28,7 +28,7 @@ const FormsFeedbackForm = () => {
     freeMessage: ""
   });
 
-  const totalSteps = 11; // Welcome + 10 questions + Final
+  const totalSteps = 12; // Welcome + 10 questions + Final
 
   const handleNext = () => {
     setCurrentStep(prev => prev + 1);

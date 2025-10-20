@@ -183,8 +183,8 @@ const FeedbackQuestionScreen = ({
   const handleNext = () => {
     const currentValue = formData[question.id];
     
-    // Validação básica
-    if (question.type === "textarea" && !currentValue) {
+    // Validação básica (mais flexível para a última pergunta)
+    if (question.type === "textarea" && !currentValue && !isLastQuestion) {
       return;
     }
     if (question.type === "likert" && !currentValue) {
@@ -214,7 +214,10 @@ const FeedbackQuestionScreen = ({
 
   const currentValue = formData[question.id];
 
-  const isValid = question.type === "textarea" ? !!currentValue :
+  // Check if this is the last question (freeMessage)
+  const isLastQuestion = question.id === "freeMessage";
+
+  const isValid = question.type === "textarea" ? (isLastQuestion ? true : !!currentValue) :
     question.type === "likert" ? !!currentValue :
     question.type === "nps" ? currentValue !== undefined :
     question.type === "nps-reason" ? !!currentValue : false;
@@ -240,16 +243,42 @@ const FeedbackQuestionScreen = ({
   return (
     <div className="max-w-4xl mx-auto">
       <div className="card-brio mb-8 text-center">
-        {/* Pergunta */}
-        <div className="mb-6">
-          <div className="text-6xl mb-4">{question.emoji}</div>
-          <h2 className="font-baloo text-2xl md:text-3xl font-bold text-gray-800 mb-3">
-            {question.title}
-          </h2>
-          <p className="font-poppins text-lg text-gray-600">
-            {question.description}
-          </p>
-        </div>
+        {/* Special header for last question */}
+        {isLastQuestion ? (
+          <div className="mb-6">
+            <div className="text-6xl mb-4 animate-bounce">{question.emoji}</div>
+            
+            {/* Título Principal com destaque sutil */}
+            <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-4 mb-6 border border-blue-100">
+              <h1 className="font-baloo text-2xl md:text-3xl font-bold text-gray-800 mb-3">
+                Chegamos ao fim — Agora é com você!
+              </h1>
+              <p className="font-poppins text-lg text-gray-700 leading-relaxed">
+              Queremos abrir um espaço pra você contar algo que ainda não apareceu nas outras perguntas.
+Pode ser uma sugestão, elogio, comparação com outras plataformas, crítica construtiva ou até uma ideia maluca que você acha que poderia virar algo legal na Brio.
+              </p>
+            </div>
+            
+            {/* Pergunta Principal */}
+            <h2 className="font-baloo text-2xl md:text-3xl font-bold text-gray-800 mb-3">
+              {question.title}
+            </h2>
+            <p className="font-poppins text-lg text-gray-600">
+              {question.description}
+            </p>
+          </div>
+        ) : (
+          /* Regular question header */
+          <div className="mb-6">
+            <div className="text-6xl mb-4">{question.emoji}</div>
+            <h2 className="font-baloo text-2xl md:text-3xl font-bold text-gray-800 mb-3">
+              {question.title}
+            </h2>
+            <p className="font-poppins text-lg text-gray-600">
+              {question.description}
+            </p>
+          </div>
+        )}
 
         {/* Campos de resposta */}
         <div className="mb-8">
@@ -266,7 +295,7 @@ const FeedbackQuestionScreen = ({
               {question.suggestions && question.suggestions.length > 1 && (
                 <div className="text-left">
                   <p className="font-poppins text-sm text-gray-500 mb-2">
-                    <span className="font-bold">💬 Sugestão para começar sua resposta:</span>
+                    <span className="font-bold">💬 Sugestões para começar sua resposta:</span>
                     <span className="text-xs text-gray-400 ml-2"></span>
                   </p>
                   <div className="bg-brio-blue-light/20 rounded-lg p-3 border border-brio-blue/30 transition-all duration-500 ease-in-out">
