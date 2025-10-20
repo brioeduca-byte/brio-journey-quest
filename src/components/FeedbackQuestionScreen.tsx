@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export interface FeedbackFormData {
   // Seção 0 - Identificação
@@ -168,6 +168,17 @@ const FeedbackQuestionScreen = ({
   const question = questions[step];
   const [currentSuggestion, setCurrentSuggestion] = useState(0);
 
+  // Auto-rotate suggestions every 4 seconds
+  useEffect(() => {
+    if (!question.suggestions || question.suggestions.length <= 1) return;
+
+    const interval = setInterval(() => {
+      setCurrentSuggestion((prev) => (prev + 1) % question.suggestions!.length);
+    }, 4000); // 4 seconds
+
+    return () => clearInterval(interval);
+  }, [question.suggestions]);
+
   if (!question) return null;
 
   const handleNext = () => {
@@ -209,9 +220,9 @@ const FeedbackQuestionScreen = ({
     question.type === "nps" ? currentValue !== undefined :
     question.type === "nps-reason" ? !!currentValue : false;
 
-  // Rotate suggestions
+  // Rotate suggestions manually (overrides auto-rotation)
   const rotateSuggestion = () => {
-    if (question.suggestions) {
+    if (question.suggestions && question.suggestions.length > 1) {
       setCurrentSuggestion((prev) => (prev + 1) % question.suggestions!.length);
     }
   };
@@ -253,19 +264,20 @@ const FeedbackQuestionScreen = ({
               />
               
               {/* Sugestões rotativas */}
-              {question.suggestions && (
+              {question.suggestions && question.suggestions.length > 1 && (
                 <div className="text-left">
                   <p className="font-poppins text-sm text-gray-500 mb-2">
                     💬 Sugestão para começar sua resposta:
+                    <span className="text-xs text-gray-400 ml-2"></span>
                   </p>
-                  <div className="bg-brio-blue-light/20 rounded-lg p-3 border border-brio-blue/30">
-                    <p className="font-poppins text-gray-700 italic">
+                  <div className="bg-brio-blue-light/20 rounded-lg p-3 border border-brio-blue/30 transition-all duration-500 ease-in-out">
+                    <p className="font-poppins text-gray-700 italic transition-opacity duration-300">
                       "{question.suggestions[currentSuggestion]}"
                     </p>
                     <button
                       type="button"
                       onClick={rotateSuggestion}
-                      className="text-brio-blue text-sm font-semibold mt-2 hover:underline"
+                      className="text-brio-blue text-sm font-semibold mt-2 hover:underline transition-colors duration-200"
                     >
                       Ver outra sugestão →
                     </button>
