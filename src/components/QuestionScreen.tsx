@@ -44,6 +44,33 @@ const questions: Question[] = [
     description: "Escolha um apelido legal para sua jornada!"
   },
   {
+    id: "schoolName",
+    title: "Qual é o nome da sua escola?",
+    emoji: "🏫",
+    type: "text",
+    description: "Exemplo: Maple Bear"
+  },
+  {
+    id: "schoolUnit",
+    title: "Qual é a unidade da sua escola?",
+    emoji: "📍",
+    type: "text",
+    description: "Exemplo: Cantareira"
+  },
+  {
+    id: "schoolYear",
+    title: "Qual é o seu ano letivo?",
+    emoji: "📚",
+    type: "radio",
+    description: "Selecione o ano que você está cursando.",
+    options: [
+      { value: "6ano", label: "6º ano" },
+      { value: "7ano", label: "7º ano" },
+      { value: "8ano", label: "8º ano" },
+      { value: "9ano", label: "9º ano" }
+    ]
+  },
+  {
     id: "favoriteCharacter",
     title: "Qual desses personagens você mais gosta?",
     emoji: "🎭",

@@ -7,6 +7,9 @@ import ProgressBar from "./ProgressBar";
 export interface FormData {
   fullName: string;
   nickname: string;
+  schoolName: string;
+  schoolUnit: string;
+  schoolYear: string;
   favoriteCharacter: string;
   favoriteCharacterCustom: string;
   superpowers: string[];
@@ -29,6 +32,9 @@ const BrioForm = () => {
   const [formData, setFormData] = useState<FormData>({
     fullName: "",
     nickname: "",
+    schoolName: "",
+    schoolUnit: "",
+    schoolYear: "",
     favoriteCharacter: "",
     favoriteCharacterCustom: "",
     superpowers: [],
@@ -46,7 +52,7 @@ const BrioForm = () => {
     ambassador: ""
   });
 
-  const totalSteps = 13; // Welcome + 11 questions + Final
+  const totalSteps = 16; // Welcome + 14 questions + Final
 
   const handleNext = () => {
     setCurrentStep(prev => prev + 1);
@@ -68,6 +74,9 @@ const BrioForm = () => {
     setFormData({
       fullName: "",
       nickname: "",
+      schoolName: "",
+      schoolUnit: "",
+      schoolYear: "",
       favoriteCharacter: "",
       favoriteCharacterCustom: "",
       superpowers: [],
@@ -111,7 +120,7 @@ const BrioForm = () => {
       <div className="container mx-auto px-4 py-8">
         <ProgressBar 
           currentStep={currentStep - 1} 
-          totalSteps={11}
+          totalSteps={14}
         />
         
         <QuestionScreen
