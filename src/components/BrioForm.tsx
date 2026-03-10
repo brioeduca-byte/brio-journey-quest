@@ -32,6 +32,9 @@ const BrioForm = () => {
   const [formData, setFormData] = useState<FormData>({
     fullName: "",
     nickname: "",
+    schoolName: "",
+    schoolUnit: "",
+    schoolYear: "",
     favoriteCharacter: "",
     favoriteCharacterCustom: "",
     superpowers: [],
