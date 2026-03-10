@@ -7,6 +7,9 @@ import ProgressBar from "./ProgressBar";
 export interface FormData {
   fullName: string;
   nickname: string;
+  schoolName: string;
+  schoolUnit: string;
+  schoolYear: string;
   favoriteCharacter: string;
   favoriteCharacterCustom: string;
   superpowers: string[];
