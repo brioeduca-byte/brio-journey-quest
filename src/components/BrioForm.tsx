@@ -74,6 +74,9 @@ const BrioForm = () => {
     setFormData({
       fullName: "",
       nickname: "",
+      schoolName: "",
+      schoolUnit: "",
+      schoolYear: "",
       favoriteCharacter: "",
       favoriteCharacterCustom: "",
       superpowers: [],
