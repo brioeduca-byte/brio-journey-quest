@@ -120,7 +120,7 @@ const BrioForm = () => {
       <div className="container mx-auto px-4 py-8">
         <ProgressBar 
           currentStep={currentStep - 1} 
-          totalSteps={11}
+          totalSteps={14}
         />
         
         <QuestionScreen
