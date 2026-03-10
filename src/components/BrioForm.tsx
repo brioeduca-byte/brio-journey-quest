@@ -52,7 +52,7 @@ const BrioForm = () => {
     ambassador: ""
   });
 
-  const totalSteps = 13; // Welcome + 11 questions + Final
+  const totalSteps = 16; // Welcome + 14 questions + Final
 
   const handleNext = () => {
     setCurrentStep(prev => prev + 1);
